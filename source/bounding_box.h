@@ -1,9 +1,9 @@
-#ifndef IOU_BOUNDING_BOX_H
-#define IOU_BOUNDING_BOX_H
+#ifndef ANALYZER_BOUNDING_BOX_H
+#define ANALYZER_BOUNDING_BOX_H
 
 #include <cmath>
 
-namespace analyze
+namespace analyzer
 {
     /**
      * \brief       Represents a bounding box on an image.
@@ -27,18 +27,23 @@ namespace analyze
 
             /**
              * \brief       Construct a bounding box.
-             * \param[in]   left,right,top,bottom   The coordinates representing the sides of the box.
+             * \param[in]   column_1,column_2   The numbers which define the bounding box columns.
+             *                                  The smaller of the two values is designated as the
+             *                                  left(), and the larger is designated as the right().
+             * \param[in]   row_1,row_2         The numbers which define the bounding box rows. The
+             *                                  smaller of the two values is designated as the
+             *                                  top(), and the larger is designated as the right().
              * \throws      None
              */
-            bounding_box(const value_type& left,
-                         const value_type& right,
-                         const value_type& top,
-                         const value_type& bottom) noexcept:
-                m_left(left),
-                m_right(right),
-                m_top(top),
-                m_bottom(bottom)
-            {}
+            bounding_box(const value_type& column_1,
+                         const value_type& column_2,
+                         const value_type& row_1,
+                         const value_type& row_2) noexcept:
+                m_left(std::min(column_1, column_2)),
+                m_right(std::max(column_1, column_2)),
+                m_top(std::min(row_1, row_2)),
+                m_bottom(std::max(row_1, row_2))
+                {}
 
             /**
              * \brief   Copy a bounding box.
@@ -107,12 +112,16 @@ namespace analyze
                        m_bottom = 0; ///< The coordinate for the box's bottom.
     };
 
+    /// Alias a bounding box type based on integer data.
+    using integer_box = bounding_box<int>;
+
     /**
      * \brief       Calculate the area of a bounding box.
      * \tparam      T       The data type of the bounding box coordinates.
      * \param[in]   box     The bounding box for which to calculate the area.
      * \return      The area of the bounding box, measured in pixel coordinates.
      * \throws      None
+     * \related     bounding_box
      */
     template <class T>
         T area(const bounding_box<T>& box) noexcept
@@ -122,26 +131,46 @@ namespace analyze
 
     /**
      * \brief       Calculate the intersection of two bounding boxes.
-     * \tparam      T           The data type of the bounding box coordinates.
-     * \param[in]   box1,box2   The boxes for which to calculate an intersection.
-     * \return      A bounding box which represents the intersection of \a box1 and \a box2.
-     * \throws      std::runtime_error  This is thrown if the two boxes have no intersection.
+     * \tparam      T     The data type of the bounding box coordinates.
+     * \param[in]   a,b   The boxes for which to calculate an intersection.
+     * \return      A bounding box which represents the intersection of \a a and \a b.
+     * \retval      bounding_box<T>(0, 0, 0, 0)   This indicates that \a a and \a b do not
+     *                                            intersect.
+     * \throws      None
+     * \related     bounding_box
      */
     template <class T>
-        bounding_box<T> intersection(const bounding_box<T>& box1, const bounding_box<T>& box2)
+        bounding_box<T> intersection(const bounding_box<T>& a, const bounding_box<T>& b) noexcept
         {
-            if ((box1.bottom() < box2.top())  ||
-                (box2.bottom() < box2.top())  ||
-                (box1.right()  < box2.left()) ||
-                (box2.right()  < box2.left()))
+            if ((a.bottom() < b.top())  ||
+                (b.bottom() < a.top())  ||
+                (a.right()  < b.left()) ||
+                (b.right()  < a.left()))
             {
-                throw std::runtime_error("box 1 and box 2 do not intersect");
+                return bounding_box<T>();
             }
 
-            return bounding_box<T>(std::max(box1.left(),   box2.left()),
-                                   std::min(box1.right(),  box2.right()),
-                                   std::max(box1.top(),    box2.top()),
-                                   std::min(box1.bottom(), box2.bottom()));
+            return bounding_box<T>(std::max(a.left(),   b.left()),
+                                   std::min(a.right(),  b.right()),
+                                   std::max(a.top(),    b.top()),
+                                   std::min(a.bottom(), b.bottom()));
+        }
+
+    /**
+     * \brief       Calculate the area of the union of two bounding boxes.
+     * \tparam      T     The data type of the bounding box coordinates.
+     * \param[in]   a,b   The boxes for which to calculate the union.
+     * \return      The area of the union of the two boxes. Note that the union is not guaranteed to
+     *              be a box, so only the area is available.
+     * \throws      None
+     * \related     bounding_box
+     * \details     The union area is calculated as
+     *              \f$ A_{\cup}(a,b) = A(a) + A(b) - A(a \cap b) \f$
+     */
+    template <class T>
+        T box_union(const bounding_box<T>& a, const bounding_box<T>& b) noexcept
+        {
+            return area(a) + area(b) - area(intersection(a, b));
         }
 }
 
