@@ -285,5 +285,5 @@ namespace analyzer
     };
 }
 
-QTEST_MAIN(analyzer::bounding_box_test);
+QTEST_MAIN(analyzer::bounding_box_test)
 #include "bounding_box_test.moc"
