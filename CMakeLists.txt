@@ -35,6 +35,23 @@ configure_file(doxyfile doxyfile)
 add_custom_target(reference doxygen COMMENT "Generating Doxygen reference manual...")
 
 #------------------------------------------------------------------------------
+#                                                     Cppcheck static analysis
+#------------------------------------------------------------------------------
+option(cppcheck_config_check
+    "Toggle using the --check-config flag for Cppcheck. Enable this if the Cppcheck output recommends it."
+    off)
+if (cppcheck_config_check)
+    set(check_config "--check-config")
+else()
+    unset(check_config)
+endif()
+
+add_custom_target(cppcheck
+    cppcheck ${check_config} --inline-suppr --enable=all --quiet ./
+    COMMENT "Running Cppcheck static analysis..."
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+#------------------------------------------------------------------------------
 #                                                    add the software to build
 #------------------------------------------------------------------------------
 add_subdirectory(source)
