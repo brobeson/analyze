@@ -8,6 +8,8 @@ endif()
 #------------------------------------------------------------------------------
 #                                                         system wide settings
 #------------------------------------------------------------------------------
+project(analyzer VERSION 0.0.0)
+
 # require a C++14 compiler
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
@@ -23,8 +25,14 @@ option(address_sanitizer
        "Enable address sanitizer for debugging. This should not be enabled for releases."
        off)
 if (address_sanitizer)
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
 endif()
+
+#------------------------------------------------------------------------------
+#                                                Doxygen source code reference
+#------------------------------------------------------------------------------
+configure_file(doxyfile doxyfile)
+add_custom_target(reference doxygen COMMENT "Generating Doxygen reference manual...")
 
 #------------------------------------------------------------------------------
 #                                                    add the software to build
