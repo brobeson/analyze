@@ -52,6 +52,16 @@ add_custom_target(cppcheck
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 #------------------------------------------------------------------------------
+#                                        lizard cyclomatic complexity analysis
+#------------------------------------------------------------------------------
+execute_process(COMMAND nproc OUTPUT_VARIABLE nproc)
+math(EXPR nproc "${nproc} - 1")
+add_custom_target(lizard
+    lizard --ignore_warnings=100000 --working_threads=${nproc} --CCN=10 --warnings_only --modified ./
+    COMMENT "Running lizard cyclomatic complexity analysis..."
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+#------------------------------------------------------------------------------
 #                                                    add the software to build
 #------------------------------------------------------------------------------
 add_subdirectory(source)
