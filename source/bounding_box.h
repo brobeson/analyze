@@ -1,6 +1,7 @@
 #ifndef ANALYZER_BOUNDING_BOX_H
 #define ANALYZER_BOUNDING_BOX_H
 
+#include <algorithm>
 #include <cmath>
 
 namespace analyzer

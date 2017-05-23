@@ -28,6 +28,14 @@ if (address_sanitizer)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
 endif()
 
+# provide a CMake time option to turn on and off unit test code coverage
+option(unit_test_coverage
+       "Toggle generating a build target for unit test code coverage."
+       off)
+if (unit_test_coverage)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage -fno-inline -fno-inline-small-functions -fno-default-inline")
+endif()
+
 #------------------------------------------------------------------------------
 #                                                Doxygen source code reference
 #------------------------------------------------------------------------------
