@@ -1,6 +1,7 @@
 #ifndef ANALYZE_IOU_H
 #define ANALYZE_IOU_H
 
+#include <iostream>
 #include "bounding_box.h"
 
 namespace analyze
@@ -17,7 +18,7 @@ namespace analyze
     {
         public:
             /// The type of the IoU value.
-            using iou_type = float;
+            using value_type = float;
 
             /**
              * \brief   Construct a default IoU.
@@ -28,33 +29,10 @@ namespace analyze
 
             /**
              * \brief       Construct an IoU object with the specified value.
-             * \param[in]   value   The value to assign to the IoU.
+             * \param[in]   value   The value to assign to the IoU. \f$value \in [0, 1]\f$
              * \throws      None
              */
-            explicit iou(const float& value) noexcept : m_value(value) {}
-
-            /**
-             * \brief       Construct an IoU for two bounding boxes.
-             * \tparam      T           The data type of the bounding box coordinates.
-             * \param[in]   box1,box2   The two bounding boxes for which to calculate the IoU.
-             * \throws      None
-             * \todo        Handle the case of division by 0
-             */
-            template <class T>
-                iou(const bounding_box<T>& box1, const bounding_box<T>& box2) noexcept
-                {
-                    try
-                    {
-                        const float intersection_area = area(intersection(box1, box2));
-                        const float area1 = area(box1);
-                        const float area2 = area(box2);
-                        m_value = intersection_area / (area1 + area2 - intersection_area);
-                    }
-                    catch (...)
-                    {
-                        m_value = 0.0f;
-                    }
-                }
+            explicit iou(const float& value) noexcept;
 
             /**
              * \brief   Copy an IoU object.
@@ -93,20 +71,84 @@ namespace analyze
              * \return  The IoU value. This is a proportion, on [0, 1].
              * \throws  None
              */
-            iou_type value() const noexcept { return m_value; }
+            value_type value() const noexcept;
 
         private:
             float m_value = 0.0f; ///< The value of the IoU.
     };
 
-    bool operator<(const iou& a, const iou& b) noexcept
-    {
-        return a.value() < b.value();
-    }
+    /// \name Comparison
+    /// \{
 
-    iou operator+(const iou& a, const iou& b) noexcept
+    bool operator==(const iou& a, const iou& b) noexcept;
+
+    bool operator!=(const iou& a, const iou& b) noexcept;
+
+    bool operator<(const iou& a, const iou& b) noexcept;
+
+    bool operator<=(const iou& a, const iou& b) noexcept;
+
+    bool operator>(const iou& a, const iou& b) noexcept;
+
+    bool operator>=(const iou& a, const iou& b) noexcept;
+    /// \}
+
+    /// \name Arithmetic
+    /// \{
+
+    iou operator+(const iou& a, const iou& b) noexcept;
+
+    iou operator+(const iou& a, const iou::value_type b) noexcept;
+
+    iou operator+(const iou::value_type a, const iou& b) noexcept;
+
+    iou operator-(const iou& a, const iou& b) noexcept;
+
+    iou operator-(const iou& a, const iou::value_type b) noexcept;
+
+    iou operator-(const iou::value_type a, const iou& b) noexcept;
+
+    iou operator*(const iou& a, const iou& b) noexcept;
+
+    iou operator*(const iou& a, const iou::value_type b) noexcept;
+
+    iou operator*(const iou::value_type a, const iou& b) noexcept;
+
+    iou operator/(const iou& a, const iou& b) noexcept;
+
+    iou operator/(const iou& a, const iou::value_type b) noexcept;
+
+    iou operator/(const iou::value_type a, const iou& b) noexcept;
+
+    /// \}
+
+    /**
+     * \brief       Construct an IoU for two bounding boxes.
+     * \tparam      T           The data type of the bounding box coordinates.
+     * \param[in]   box1,box2   The two bounding boxes for which to calculate the IoU.
+     * \throws      None
+     * \todo        Handle the case of division by 0
+     */
+    template <class T>
+        iou make_iou(const bounding_box<T>& box1, const bounding_box<T>& box2) noexcept
+        {
+            try
+            {
+                const float intersection_area = area(intersection(box1, box2));
+                const float area1 = area(box1);
+                const float area2 = area(box2);
+                return iou(intersection_area / (area1 + area2 - intersection_area));
+            }
+            catch (...)
+            {
+                return iou();
+            }
+        }
+
+    template <class CharT, class Traits>
+    std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& output, const iou& i) noexcept
     {
-        return iou(a.value() + b.value());
+        return output << i.value();
     }
 }
 

@@ -3,7 +3,7 @@
 #include <numeric>
 #include <vector>
 #include "bounding_box.h"
-#include "ctype.h"
+#include "comma_ctype.h"
 #include "iou.h"
 
 
@@ -68,7 +68,7 @@ namespace analyze
         constexpr box_list::size_type stride = 5;
         const auto length = std::min(results.size(), ground_truth.size());
         for (box_list::size_type b = 0; b < length; b += stride)
-            ious.emplace_back(results[b], ground_truth[b]);
+            ious.emplace_back(make_iou(results[b], ground_truth[b]));
         return ious;
     }
 
@@ -129,7 +129,7 @@ namespace analyze
         // write the minimum, average, and maximum
         file << "minimum: "   << std::min_element(ious.cbegin(), ious.cend())->value()
              << "\nmaximum: " << std::max_element(ious.cbegin(), ious.cend())->value()
-             << "\naverage: " << std::accumulate(ious.cbegin(), ious.cend(), iou(0.0f)).value() / ious.size();
+             << "\naverage: " << std::accumulate(ious.cbegin(), ious.cend(), iou(0.0f)) / ious.size();
     }
 
     /**

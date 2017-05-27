@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <cmath>
 
-namespace analyzer
+namespace analyze
 {
     /**
      * \brief       Represents a bounding box on an image.

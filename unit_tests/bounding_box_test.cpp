@@ -2,12 +2,12 @@
 #include "bounding_box.h"
 
 // this allows bounding_box<int> objects to be added to the data table
-Q_DECLARE_METATYPE(analyzer::integer_box)
+Q_DECLARE_METATYPE(analyze::integer_box)
 
 namespace QTest
 {
     template <>
-        char* toString(const analyzer::integer_box& box)
+        char* toString(const analyze::integer_box& box)
         {
             QByteArray a = "(";
             a.append(QByteArray::number(box.left()))
@@ -22,7 +22,7 @@ namespace QTest
         }
 }
 
-namespace analyzer
+namespace analyze
 {
     bool operator==(const integer_box& a, const integer_box& b)
     {
@@ -32,7 +32,7 @@ namespace analyzer
                a.bottom() == b.bottom();
     }
 
-    /// A set of unit tests for the analyzer::bounding_box class and associated functions.
+    /// A set of unit tests for the analyze::bounding_box class and associated functions.
     class bounding_box_test final: public QObject
     {
         Q_OBJECT
@@ -285,5 +285,5 @@ namespace analyzer
     };
 }
 
-QTEST_MAIN(analyzer::bounding_box_test)
+QTEST_MAIN(analyze::bounding_box_test)
 #include "bounding_box_test.moc"
