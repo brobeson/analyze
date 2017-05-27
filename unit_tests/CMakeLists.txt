@@ -56,11 +56,11 @@ if (unit_test_coverage)
         COMMENT "Running unit tests..."
         WORKING_DIRECTORY "${CMAKE_BINARY_DIR}")
 else()
-    message(WARNING "unit_test_coverage is off, so the coverage build target won't be available.")
+    message(STATUS "unit_test_coverage is off, so the coverage build target won't be available.")
 endif()
 
 #-------------------------------------------------------------------------------
-#                                             unit tests analyzer::bounding_box
+#                                             unit tests analyze::bounding_box
 #-------------------------------------------------------------------------------
 set(test_name "bounding-box-test")
 add_executable(${test_name}
@@ -72,6 +72,9 @@ target_include_directories(${test_name}
             ${CMAKE_CURRENT_BINARY_DIR})
 add_test(NAME ${test_name} COMMAND ${test_name})
 
+#-------------------------------------------------------------------------------
+#                                                      unit tests analyze::iou
+#-------------------------------------------------------------------------------
 set(test_name "iou-test")
 add_executable(${test_name}
     iou_test.cpp

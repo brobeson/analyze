@@ -8,7 +8,7 @@ endif()
 #------------------------------------------------------------------------------
 #                                                         system wide settings
 #------------------------------------------------------------------------------
-project(analyzer VERSION 0.0.0)
+project(analyze VERSION 0.0.0)
 
 # require a C++14 compiler
 set(CMAKE_CXX_STANDARD 14)
