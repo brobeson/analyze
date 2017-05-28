@@ -1,4 +1,5 @@
 #include "iou.h"
+#include <QtGlobal>
 
 namespace analyze
 {
@@ -19,7 +20,7 @@ namespace analyze
     //-------------------------------------------------------
     bool operator==(const iou& a, const iou& b) noexcept
     {
-        return a.value() == b.value();
+        return qFuzzyCompare(a.value(), b.value());
     }
 
     bool operator!=(const iou& a, const iou& b) noexcept

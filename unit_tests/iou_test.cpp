@@ -13,6 +13,13 @@ namespace QTest
             QByteArray a = s.c_str();
             return qstrdup(a);
         }
+
+    template <>
+        char* toString(const analyze::iou& i)
+        {
+            QByteArray a = QByteArray::number(i.value());
+            return qstrdup(a);
+        }
 }
 
 namespace analyze
@@ -199,6 +206,106 @@ namespace analyze
                 const iou i(4.5f);
                 s << i;
                 QCOMPARE(s.str(), std::string("4.5"));
+            }
+
+            void test_operator_add_data() noexcept
+            {
+                QTest::addColumn<iou::value_type>("a");
+                QTest::addColumn<iou::value_type>("b");
+                QTest::addColumn<iou>            ("expected_result");
+
+                QTest::newRow(" 0.0 +  0.0 =  0.0") <<  0.0f <<  0.0f << iou( 0.0f);
+                QTest::newRow(" 0.0 +  0.4 =  0.4") <<  0.0f <<  0.4f << iou( 0.4f);
+                QTest::newRow(" 0.4 +  0.0 =  0.4") <<  0.4f <<  0.0f << iou( 0.4f);
+                QTest::newRow(" 1.0 + -0.3 =  0.7") <<  1.0f << -0.3f << iou( 0.7f);
+                QTest::newRow("-0.3 +  1.0 =  0.7") << -0.3f <<  1.0f << iou( 0.7f);
+                QTest::newRow("-0.3 + -0.7 = -1.0") << -0.3f << -0.7f << iou(-1.0f);
+                QTest::newRow("-0.7 + -0.3 = -1.0") << -0.7f << -0.3f << iou(-1.0f);
+            }
+
+            void test_operator_add() noexcept
+            {
+                QFETCH(iou::value_type, a);
+                QFETCH(iou::value_type, b);
+
+                QTEST(iou(a) + iou(b), "expected_result");
+                QTEST(iou(a) +     b , "expected_result");
+                QTEST(    a  + iou(b), "expected_result");
+            }
+
+            void test_operator_subtract_data() noexcept
+            {
+                QTest::addColumn<iou::value_type>("a");
+                QTest::addColumn<iou::value_type>("b");
+                QTest::addColumn<iou>("expected_result");
+
+                QTest::newRow(" 0.0 -  0.0 =  0.0") <<  0.0f <<  0.0f << iou( 0.0f);
+                QTest::newRow(" 0.0 -  0.4 = -0.4") <<  0.0f <<  0.4f << iou(-0.4f);
+                QTest::newRow(" 0.4 -  0.0 =  0.4") <<  0.4f <<  0.0f << iou( 0.4f);
+                QTest::newRow(" 1.0 - -0.3 =  1.3") <<  1.0f << -0.3f << iou( 1.3f);
+                QTest::newRow("-0.3 -  1.0 = -1.3") << -0.3f <<  1.0f << iou(-1.3f);
+                QTest::newRow("-0.3 - -0.7 =  0.4") << -0.3f << -0.7f << iou( 0.4f);
+                QTest::newRow("-0.7 - -0.3 = -0.4") << -0.7f << -0.3f << iou(-0.4f);
+            }
+
+            void test_operator_subtract() noexcept
+            {
+                QFETCH(iou::value_type, a);
+                QFETCH(iou::value_type, b);
+
+                QTEST(iou(a) - iou(b), "expected_result");
+                QTEST(iou(a) -     b , "expected_result");
+                QTEST(    a  - iou(b), "expected_result");
+            }
+
+            void test_operator_multiply_data() noexcept
+            {
+                QTest::addColumn<iou::value_type>("a");
+                QTest::addColumn<iou::value_type>("b");
+                QTest::addColumn<iou>            ("expected_result");
+
+                QTest::newRow(" 0.0 *  0.0 =  0.0 ") <<  0.0f <<  0.0f << iou( 0.0f);
+                QTest::newRow(" 0.0 *  0.4 =  0.0 ") <<  0.0f <<  0.4f << iou( 0.0f);
+                QTest::newRow(" 0.4 *  0.0 =  0.0 ") <<  0.4f <<  0.0f << iou( 0.0f);
+                QTest::newRow(" 1.0 * -0.3 = -0.3 ") <<  1.0f << -0.3f << iou(-0.3f);
+                QTest::newRow("-0.3 *  1.0 = -0.3 ") << -0.3f <<  1.0f << iou(-0.3f);
+                QTest::newRow("-0.3 * -0.7 =  0.21") << -0.3f << -0.7f << iou( 0.21f);
+                QTest::newRow("-0.7 * -0.3 =  0.21") << -0.7f << -0.3f << iou( 0.21f);
+                QTest::newRow(" 0.7 *  0.3 =  0.21") << -0.7f << -0.3f << iou( 0.21f);
+            }
+
+            void test_operator_multiply() noexcept
+            {
+                QFETCH(iou::value_type, a);
+                QFETCH(iou::value_type, b);
+
+                QTEST(iou(a) * iou(b), "expected_result");
+                QTEST(iou(a) *     b , "expected_result");
+                QTEST(    a  * iou(b), "expected_result");
+            }
+
+            void test_operator_divide_data() noexcept
+            {
+                QTest::addColumn<iou::value_type>("a");
+                QTest::addColumn<iou::value_type>("b");
+                QTest::addColumn<iou>            ("expected_result");
+
+                QTest::newRow(" 0.0 /  0.4 =  0.0 ") <<  0.0f <<  0.4f << iou( 0.0f);
+                QTest::newRow(" 1.0 / -0.3 = -3.33") <<  1.0f << -0.3f << iou( 1.0f / -0.3f);
+                QTest::newRow("-0.3 /  1.0 = -0.3 ") << -0.3f <<  1.0f << iou(-0.3f);
+                QTest::newRow("-0.3 / -0.7 =  0.43") << -0.3f << -0.7f << iou(-0.3f / -0.7f);
+                QTest::newRow("-0.7 / -0.3 =  2.33") << -0.7f << -0.3f << iou(-0.7f / -0.3f);
+                QTest::newRow(" 0.7 /  0.3 =  2.33") << -0.7f << -0.3f << iou( 0.7f /  0.3f);
+            }
+
+            void test_operator_divide() noexcept
+            {
+                QFETCH(iou::value_type, a);
+                QFETCH(iou::value_type, b);
+
+                QTEST(iou(a) / iou(b), "expected_result");
+                QTEST(iou(a) /     b , "expected_result");
+                QTEST(    a  / iou(b), "expected_result");
             }
     };
 }
