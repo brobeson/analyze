@@ -80,44 +80,132 @@ namespace analyze
     /// \name Comparison
     /// \{
 
+    /**
+     * \brief       Compare two IoU objects for equality.
+     * \param[in]   a,b     The two IoU objects to compare.
+     * \retval      true    \a a is equivalent to \a b.
+     * \retval      false   \a a is not equivalent to \a b.
+     * \throws      None
+     * \details     This function uses a fuzzy comparison since iou::value_type is a floating point
+     *              type. This allows for IoU values very close to each other to be considered
+     *              equivalent.
+     */
     bool operator==(const iou& a, const iou& b) noexcept;
 
+    /**
+     * \brief       Compare two IoU objects for inequality.
+     * \param[in]   a,b     The two IoU objects to compare.
+     * \retval      true    \a a is not equivalent to \a b.
+     * \retval      false   \a a is equivalent to \a b.
+     * \throws      None
+     * \details     This function uses a fuzzy comparison since iou::value_type is a floating point
+     *              type. This allows for IoU values very close to each other to be considered
+     *              equivalent.
+     */
     bool operator!=(const iou& a, const iou& b) noexcept;
 
+    /**
+     * \brief       Query if one IoU is less than another.
+     * \param[in]   a,b     The two IoU objects to compare.
+     * \retval      true    \a a is less than \a b.
+     * \retval      false   \a a is greater than, or equal to, \a b.
+     * \throws      None
+     */
     bool operator<(const iou& a, const iou& b) noexcept;
 
+    /**
+     * \brief       Query if one IoU is less than, or equal to, another.
+     * \param[in]   a,b     The two IoU objects to compare.
+     * \retval      true    \a a is less than, or equal to, \a b.
+     * \retval      false   \a a is greater than \a b.
+     * \throws      None
+     * \details     This function uses a fuzzy comparison since iou::value_type is a floating point
+     *              type. This allows for IoU values very close to each other to be considered
+     *              equivalent.
+     */
     bool operator<=(const iou& a, const iou& b) noexcept;
 
+    /**
+     * \brief       Query if one IoU is greater than another.
+     * \param[in]   a,b     The two IoU objects to compare.
+     * \retval      true    \a a is greater than \a b.
+     * \retval      false   \a a is less than, or equal to, \a b.
+     * \throws      None
+     */
     bool operator>(const iou& a, const iou& b) noexcept;
 
+    /**
+     * \brief       Query if one IoU is greater than, or equal to, another.
+     * \param[in]   a,b     The two IoU objects to compare.
+     * \retval      true    \a a is greater than, or equal to, \a b.
+     * \retval      false   \a a is less than \a b.
+     * \throws      None
+     * \details     This function uses a fuzzy comparison since iou::value_type is a floating point
+     *              type. This allows for IoU values very close to each other to be considered
+     *              equivalent.
+     */
     bool operator>=(const iou& a, const iou& b) noexcept;
     /// \}
 
     /// \name Arithmetic
     /// \{
 
+    /**
+     * \brief       Add two IoU objects.
+     * \param[in]   a,b     The two objects to add.
+     * \return      \f$ f(a,b) = a + b \f$
+     * \throws      None
+     */
     iou operator+(const iou& a, const iou& b) noexcept;
 
+    /// copydoc operator+(const iou&, const iou&)
     iou operator+(const iou& a, const iou::value_type b) noexcept;
 
+    /// copydoc operator+(const iou&, const iou&)
     iou operator+(const iou::value_type a, const iou& b) noexcept;
 
+    /**
+     * \brief       Subtract one IoU value from another.
+     * \param[in]   a,b     The two IoU's to subtract.
+     * \return      \f$ f(a,b) = a - b \f$
+     * \throws      None
+     */
     iou operator-(const iou& a, const iou& b) noexcept;
 
+    /// copydoc operator-(const iou&, const iou&)
     iou operator-(const iou& a, const iou::value_type b) noexcept;
 
+    /// copydoc operator-(const iou&, const iou&)
     iou operator-(const iou::value_type a, const iou& b) noexcept;
 
+    /**
+     * \brief       Multiply two IoU values.
+     * \param[in]   a,b     The two IoU's to multiply.
+     * \return      The product of two IoU values.
+     * \return      \f$ f(a,b) = a \times b \f$
+     * \throws      None
+     */
     iou operator*(const iou& a, const iou& b) noexcept;
 
+    /// copydoc operator*(const iou&, const iou&)
     iou operator*(const iou& a, const iou::value_type b) noexcept;
 
+    /// copydoc operator*(const iou&, const iou&)
     iou operator*(const iou::value_type a, const iou& b) noexcept;
 
+    /**
+     * \brief       Divide two IoU values.
+     * \param[in]   a,b     The two Iou's to divide.
+     * \return      \f$ f(a,b) = \frac{a}{b} \f$
+     * \throws      None
+     * \warning     This operator does not check for division by zero.
+     */
     iou operator/(const iou& a, const iou& b) noexcept;
 
+    /// copydoc operator/(const iou&, const iou&)
     iou operator/(const iou& a, const iou::value_type b) noexcept;
 
+    /// copydoc operator/(const iou&, const iou&)
     iou operator/(const iou::value_type a, const iou& b) noexcept;
 
     /// \}
@@ -145,11 +233,20 @@ namespace analyze
             }
         }
 
+    /**
+     * \brief           Write an IoU value to an output stream.
+     * \tparam          CharT   See [std::basic_ostream](http://en.cppreference.com/w/cpp/io/basic_ostream).
+     * \tparam          Traits  See [std::basic_ostream](http://en.cppreference.com/w/cpp/io/basic_ostream).
+     * \param[in,out]   output  The output stream to which to write the IoU.
+     * \param[in]       i       The IoU to write.
+     * \throws          None
+     */
     template <class CharT, class Traits>
-    std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& output, const iou& i) noexcept
-    {
-        return output << i.value();
-    }
+        std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& output,
+                                                      const iou& i) noexcept
+        {
+            return output << i.value();
+        }
 }
 
 #endif

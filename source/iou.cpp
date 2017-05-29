@@ -16,7 +16,7 @@ namespace analyze
     }
 
     //-------------------------------------------------------
-    //                                 iou related functions
+    //                                        iou comparison
     //-------------------------------------------------------
     bool operator==(const iou& a, const iou& b) noexcept
     {
@@ -35,7 +35,8 @@ namespace analyze
 
     bool operator<=(const iou& a, const iou& b) noexcept
     {
-        return a.value() <= b.value();
+        // need to take advantage of fuzzy equality here
+        return (a < b) || (a == b);
     }
 
     bool operator>(const iou& a, const iou& b) noexcept
@@ -45,9 +46,13 @@ namespace analyze
 
     bool operator>=(const iou& a, const iou& b) noexcept
     {
-        return a.value() >= b.value();
+        // need to take advantage of fuzzy equality here
+        return (a > b) || (a == b);
     }
 
+    //-------------------------------------------------------
+    //                                        iou arithmetic
+    //-------------------------------------------------------
     iou operator+(const iou& a, const iou& b) noexcept
     {
         return iou(a.value() + b.value());
