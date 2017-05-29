@@ -67,11 +67,76 @@ namespace analyze
             iou& operator=(iou&&) = default;
 
             /**
+             * \brief       Set the IoU value.
+             * \param[in]   v   The new value to set.
+             * \throws      None
+             */
+            iou& operator=(const iou::value_type v) noexcept;
+
+            /**
              * \brief   Query the IoU value.
              * \return  The IoU value. This is a proportion, on [0, 1].
              * \throws  None
              */
             value_type value() const noexcept;
+
+            /**
+             * \brief       Add an IoU value to this IoU.
+             * \param[in]   a   The IoU value to add to this IoU.
+             * \throws      None
+             */
+            iou& operator+=(const iou& a) noexcept;
+
+            /// \copydoc    operator+=(const iou&)
+            iou& operator+=(const iou::value_type a) noexcept;
+
+            /**
+             * \brief       Subtract an IoU value from this IoU.
+             * \param[in]   a   The IoU value to subtract from this IoU.
+             * \throws      None
+             */
+            iou& operator-=(const iou& a) noexcept;
+
+            /// \copydoc    operator-=(const iou&)
+            iou& operator-=(const iou::value_type a) noexcept;
+
+            /**
+             * \brief       Multiply an IoU value with this IoU.
+             * \param[in]   a   The IoU value to multiply with this IoU.
+             * \throws      None
+             */
+            iou& operator*=(const iou& a) noexcept;
+
+            /// \copydoc    operator*=(const iou&)
+            iou& operator*=(const iou::value_type a) noexcept;
+
+            /**
+             * \brief       Divide this IoU by another IoU value.
+             * \param[in]   a   The IoU value by which to divide this.
+             * \throws      None
+             * \warning     This operator does not guard against division by zero.
+             */
+            iou& operator/=(const iou& a) noexcept;
+
+            /// \copydoc    operator/=(const iou&)
+            iou& operator/=(const iou::value_type a) noexcept;
+
+            /**
+             * \brief       Divide this IoU by another IoU value.
+             * \param[in]   a   The IoU value by which to divide this.
+             * \throws      None
+             * \warning     This operator does not guard against division by zero.
+             */
+            iou& operator%=(const iou& a) noexcept;
+
+            /// \copydoc    operator/=(const iou&)
+            iou& operator%=(const iou::value_type a) noexcept;
+
+            /**
+             * \brief   Negate this IoU value.
+             * \throws  None
+             */
+            iou operator-() noexcept;
 
         private:
             float m_value = 0.0f; ///< The value of the IoU.
@@ -207,6 +272,21 @@ namespace analyze
 
     /// copydoc operator/(const iou&, const iou&)
     iou operator/(const iou::value_type a, const iou& b) noexcept;
+
+    /**
+     * \brief       Modulo two IoU values.
+     * \param[in]   a,b     The two Iou's to modulo.
+     * \return      std::fmod(a.value(), b.value())
+     * \throws      None
+     * \warning     This operator does not check for division by zero.
+     */
+    iou operator%(const iou& a, const iou& b) noexcept;
+
+    /// copydoc operator/(const iou&, const iou&)
+    iou operator%(const iou& a, const iou::value_type b) noexcept;
+
+    /// copydoc operator/(const iou&, const iou&)
+    iou operator%(const iou::value_type a, const iou& b) noexcept;
 
     /// \}
 

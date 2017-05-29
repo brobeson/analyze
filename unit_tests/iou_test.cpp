@@ -128,6 +128,72 @@ namespace analyze
                 }
             }
 
+            void test_operator_assign() noexcept
+            {
+                iou a(4.0f);
+                a = 5.0f;
+                QCOMPARE(a.value(), 5.0f);
+            }
+
+            void test_operator_add_assign() noexcept
+            {
+                iou a(4.0f);
+                a += iou(5.0f);
+                QCOMPARE(a.value(), 9.0f);
+
+                a += 5.0f;
+                QCOMPARE(a.value(), 14.0f);
+            }
+
+            void test_operator_subtract_assign() noexcept
+            {
+                iou a(4.0f);
+                a -= iou(5.0f);
+                QCOMPARE(a.value(), -1.0f);
+
+                a -= 5.0f;
+                QCOMPARE(a.value(), -6.0f);
+            }
+
+            void test_operator_multiply_assign() noexcept
+            {
+                iou a(4.0f);
+                a *= iou(5.0f);
+                QCOMPARE(a.value(), 20.0f);
+
+                a *= 5.0f;
+                QCOMPARE(a.value(), 100.0f);
+            }
+
+            void test_operator_divide_assign() noexcept
+            {
+                iou a(4.0f);
+                a /= iou(5.0f);
+                QCOMPARE(a.value(), 4.0f / 5.0f);
+
+                a /= 5.0f;
+                QCOMPARE(a.value(), 4.0f / 5.0f / 5.0f);
+            }
+
+            void test_operator_modulo_assign() noexcept
+            {
+                iou a(23.0f);
+                a %= iou(5.0f);
+                QCOMPARE(a.value(), std::fmod(23.0f, 5.0f));
+
+                a %= 2.0f;
+                QCOMPARE(a.value(), std::fmod(std::fmod(23.0f, 5.0f), 2.0f));
+            }
+
+            void test_operator_negate() noexcept
+            {
+                iou a(4.0f);
+                QCOMPARE(-a, iou(-4.0f));
+
+                a = 0.0f;
+                QCOMPARE(-a, iou(0.0f));
+            }
+
             void test_operator_equal_data() noexcept
             {
                 make_comparison_table(false, true, false);
@@ -271,7 +337,7 @@ namespace analyze
                 QTest::newRow("-0.3 *  1.0 = -0.3 ") << -0.3f <<  1.0f << iou(-0.3f);
                 QTest::newRow("-0.3 * -0.7 =  0.21") << -0.3f << -0.7f << iou( 0.21f);
                 QTest::newRow("-0.7 * -0.3 =  0.21") << -0.7f << -0.3f << iou( 0.21f);
-                QTest::newRow(" 0.7 *  0.3 =  0.21") << -0.7f << -0.3f << iou( 0.21f);
+                QTest::newRow(" 0.7 *  0.3 =  0.21") <<  0.7f <<  0.3f << iou( 0.21f);
             }
 
             void test_operator_multiply() noexcept
@@ -295,7 +361,7 @@ namespace analyze
                 QTest::newRow("-0.3 /  1.0 = -0.3 ") << -0.3f <<  1.0f << iou(-0.3f);
                 QTest::newRow("-0.3 / -0.7 =  0.43") << -0.3f << -0.7f << iou(-0.3f / -0.7f);
                 QTest::newRow("-0.7 / -0.3 =  2.33") << -0.7f << -0.3f << iou(-0.7f / -0.3f);
-                QTest::newRow(" 0.7 /  0.3 =  2.33") << -0.7f << -0.3f << iou( 0.7f /  0.3f);
+                QTest::newRow(" 0.7 /  0.3 =  2.33") <<  0.7f <<  0.3f << iou( 0.7f /  0.3f);
             }
 
             void test_operator_divide() noexcept
@@ -306,6 +372,30 @@ namespace analyze
                 QTEST(iou(a) / iou(b), "expected_result");
                 QTEST(iou(a) /     b , "expected_result");
                 QTEST(    a  / iou(b), "expected_result");
+            }
+
+            void test_operator_modulo_data() noexcept
+            {
+                QTest::addColumn<iou::value_type>("a");
+                QTest::addColumn<iou::value_type>("b");
+                QTest::addColumn<iou>            ("expected_result");
+
+                QTest::newRow(" 0.0 /  0.4 =  0.0 ") <<  0.0f <<  0.4f << iou(std::fmod( 0.0f,  0.4f));
+                QTest::newRow(" 1.0 / -0.3 = -3.33") <<  1.0f << -0.3f << iou(std::fmod( 1.0f, -0.3f));
+                QTest::newRow("-0.3 /  1.0 = -0.3 ") << -0.3f <<  1.0f << iou(std::fmod(-0.3f,  1.0f));
+                QTest::newRow("-0.3 / -0.7 =  0.43") << -0.3f << -0.7f << iou(std::fmod(-0.3f, -0.7f));
+                QTest::newRow("-0.7 / -0.3 =  2.33") << -0.7f << -0.3f << iou(std::fmod(-0.7f, -0.3f));
+                QTest::newRow(" 0.7 /  0.3 =  2.33") <<  0.7f <<  0.3f << iou(std::fmod( 0.7f,  0.3f));
+            }
+
+            void test_operator_modulo() noexcept
+            {
+                QFETCH(iou::value_type, a);
+                QFETCH(iou::value_type, b);
+
+                QTEST(iou(a) % iou(b), "expected_result");
+                QTEST(iou(a) %     b , "expected_result");
+                QTEST(    a  % iou(b), "expected_result");
             }
     };
 }
