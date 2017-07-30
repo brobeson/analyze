@@ -1,10 +1,10 @@
+#include "bounding_box.h"
+#include "comma_ctype.h"
+#include "iou.h"
 #include <fstream>
 #include <iostream>
 #include <numeric>
 #include <vector>
-#include "bounding_box.h"
-#include "comma_ctype.h"
-#include "iou.h"
 
 
 namespace analyze
@@ -87,7 +87,7 @@ namespace analyze
         std::ofstream file(file_name.c_str());
         if (file)
         {
-            for (const auto& box: boxes)
+            for (const auto& box : boxes)
                 file << box.left() << "," << box.right() << "," << box.top() << "," << box.bottom() << "\n";
         }
     }

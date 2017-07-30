@@ -6,9 +6,7 @@ namespace analyze
     //-------------------------------------------------------
     //                                     iou class methods
     //-------------------------------------------------------
-    iou::iou(const float& value) noexcept:
-        m_value(value)
-    {}
+    iou::iou(const float& value) noexcept : m_value(value) {}
 
     iou& iou::operator=(const iou::value_type v) noexcept
     {
@@ -199,4 +197,3 @@ namespace analyze
         return iou(std::fmod(a, b.value()));
     }
 }
-

@@ -1,8 +1,8 @@
 #ifndef ANALYZE_IOU_H
 #define ANALYZE_IOU_H
 
-#include <iostream>
 #include "bounding_box.h"
+#include <iostream>
 
 namespace analyze
 {
@@ -16,130 +16,130 @@ namespace analyze
      */
     class iou final
     {
-        public:
-            /// The type of the IoU value.
-            using value_type = float;
+    public:
+        /// The type of the IoU value.
+        using value_type = float;
 
-            /**
-             * \brief   Construct a default IoU.
-             * \throws  None
-             * \details The IoU value is 0.
-             */
-            iou() = default;
+        /**
+         * \brief   Construct a default IoU.
+         * \throws  None
+         * \details The IoU value is 0.
+         */
+        iou() = default;
 
-            /**
-             * \brief       Construct an IoU object with the specified value.
-             * \param[in]   value   The value to assign to the IoU. \f$value \in [0, 1]\f$
-             * \throws      None
-             */
-            explicit iou(const float& value) noexcept;
+        /**
+         * \brief       Construct an IoU object with the specified value.
+         * \param[in]   value   The value to assign to the IoU. \f$value \in [0, 1]\f$
+         * \throws      None
+         */
+        explicit iou(const float& value) noexcept;
 
-            /**
-             * \brief   Copy an IoU object.
-             * \throws  None
-             */
-            iou(const iou&) = default;
+        /**
+         * \brief   Copy an IoU object.
+         * \throws  None
+         */
+        iou(const iou&) = default;
 
-            /**
-             * \brief   Move an IoU object.
-             * \throws  None
-             */
-            iou(iou&&) = default;
+        /**
+         * \brief   Move an IoU object.
+         * \throws  None
+         */
+        iou(iou&&) = default;
 
-            /**
-             * \brief   Destroy an IoU object.
-             * \throws  None
-             */
-            ~iou() noexcept = default;
+        /**
+         * \brief   Destroy an IoU object.
+         * \throws  None
+         */
+        ~iou() noexcept = default;
 
-            /**
-             * \brief   Copy an IoU object.
-             * \return  A reference to this IoU object.
-             * \throws  None
-             */
-            iou& operator=(const iou&) = default;
+        /**
+         * \brief   Copy an IoU object.
+         * \return  A reference to this IoU object.
+         * \throws  None
+         */
+        iou& operator=(const iou&) = default;
 
-            /**
-             * \brief   Move an IoU object.
-             * \return  A reference to this IoU object.
-             * \throws  None
-             */
-            iou& operator=(iou&&) = default;
+        /**
+         * \brief   Move an IoU object.
+         * \return  A reference to this IoU object.
+         * \throws  None
+         */
+        iou& operator=(iou&&) = default;
 
-            /**
-             * \brief       Set the IoU value.
-             * \param[in]   v   The new value to set.
-             * \throws      None
-             */
-            iou& operator=(const iou::value_type v) noexcept;
+        /**
+         * \brief       Set the IoU value.
+         * \param[in]   v   The new value to set.
+         * \throws      None
+         */
+        iou& operator=(const iou::value_type v) noexcept;
 
-            /**
-             * \brief   Query the IoU value.
-             * \return  The IoU value. This is a proportion, on [0, 1].
-             * \throws  None
-             */
-            value_type value() const noexcept;
+        /**
+         * \brief   Query the IoU value.
+         * \return  The IoU value. This is a proportion, on [0, 1].
+         * \throws  None
+         */
+        value_type value() const noexcept;
 
-            /**
-             * \brief       Add an IoU value to this IoU.
-             * \param[in]   a   The IoU value to add to this IoU.
-             * \throws      None
-             */
-            iou& operator+=(const iou& a) noexcept;
+        /**
+         * \brief       Add an IoU value to this IoU.
+         * \param[in]   a   The IoU value to add to this IoU.
+         * \throws      None
+         */
+        iou& operator+=(const iou& a) noexcept;
 
-            /// \copydoc    operator+=(const iou&)
-            iou& operator+=(const iou::value_type a) noexcept;
+        /// \copydoc    operator+=(const iou&)
+        iou& operator+=(const iou::value_type a) noexcept;
 
-            /**
-             * \brief       Subtract an IoU value from this IoU.
-             * \param[in]   a   The IoU value to subtract from this IoU.
-             * \throws      None
-             */
-            iou& operator-=(const iou& a) noexcept;
+        /**
+         * \brief       Subtract an IoU value from this IoU.
+         * \param[in]   a   The IoU value to subtract from this IoU.
+         * \throws      None
+         */
+        iou& operator-=(const iou& a) noexcept;
 
-            /// \copydoc    operator-=(const iou&)
-            iou& operator-=(const iou::value_type a) noexcept;
+        /// \copydoc    operator-=(const iou&)
+        iou& operator-=(const iou::value_type a) noexcept;
 
-            /**
-             * \brief       Multiply an IoU value with this IoU.
-             * \param[in]   a   The IoU value to multiply with this IoU.
-             * \throws      None
-             */
-            iou& operator*=(const iou& a) noexcept;
+        /**
+         * \brief       Multiply an IoU value with this IoU.
+         * \param[in]   a   The IoU value to multiply with this IoU.
+         * \throws      None
+         */
+        iou& operator*=(const iou& a) noexcept;
 
-            /// \copydoc    operator*=(const iou&)
-            iou& operator*=(const iou::value_type a) noexcept;
+        /// \copydoc    operator*=(const iou&)
+        iou& operator*=(const iou::value_type a) noexcept;
 
-            /**
-             * \brief       Divide this IoU by another IoU value.
-             * \param[in]   a   The IoU value by which to divide this.
-             * \throws      None
-             * \warning     This operator does not guard against division by zero.
-             */
-            iou& operator/=(const iou& a) noexcept;
+        /**
+         * \brief       Divide this IoU by another IoU value.
+         * \param[in]   a   The IoU value by which to divide this.
+         * \throws      None
+         * \warning     This operator does not guard against division by zero.
+         */
+        iou& operator/=(const iou& a) noexcept;
 
-            /// \copydoc    operator/=(const iou&)
-            iou& operator/=(const iou::value_type a) noexcept;
+        /// \copydoc    operator/=(const iou&)
+        iou& operator/=(const iou::value_type a) noexcept;
 
-            /**
-             * \brief       Divide this IoU by another IoU value.
-             * \param[in]   a   The IoU value by which to divide this.
-             * \throws      None
-             * \warning     This operator does not guard against division by zero.
-             */
-            iou& operator%=(const iou& a) noexcept;
+        /**
+         * \brief       Divide this IoU by another IoU value.
+         * \param[in]   a   The IoU value by which to divide this.
+         * \throws      None
+         * \warning     This operator does not guard against division by zero.
+         */
+        iou& operator%=(const iou& a) noexcept;
 
-            /// \copydoc    operator/=(const iou&)
-            iou& operator%=(const iou::value_type a) noexcept;
+        /// \copydoc    operator/=(const iou&)
+        iou& operator%=(const iou::value_type a) noexcept;
 
-            /**
-             * \brief   Negate this IoU value.
-             * \throws  None
-             */
-            iou operator-() noexcept;
+        /**
+         * \brief   Negate this IoU value.
+         * \throws  None
+         */
+        iou operator-() noexcept;
 
-        private:
-            float m_value = 0.0f; ///< The value of the IoU.
+    private:
+        float m_value = 0.0f; ///< The value of the IoU.
     };
 
     /// \name Comparison
@@ -298,20 +298,20 @@ namespace analyze
      * \todo        Handle the case of division by 0
      */
     template <class T>
-        iou make_iou(const bounding_box<T>& box1, const bounding_box<T>& box2) noexcept
+    iou make_iou(const bounding_box<T>& box1, const bounding_box<T>& box2) noexcept
+    {
+        try
         {
-            try
-            {
-                const float intersection_area = area(intersection(box1, box2));
-                const float area1 = area(box1);
-                const float area2 = area(box2);
-                return iou(intersection_area / (area1 + area2 - intersection_area));
-            }
-            catch (...)
-            {
-                return iou();
-            }
+            const float intersection_area = area(intersection(box1, box2));
+            const float area1             = area(box1);
+            const float area2             = area(box2);
+            return iou(intersection_area / (area1 + area2 - intersection_area));
         }
+        catch (...)
+        {
+            return iou();
+        }
+    }
 
     /**
      * \brief           Write an IoU value to an output stream.
@@ -322,12 +322,11 @@ namespace analyze
      * \throws          None
      */
     template <class CharT, class Traits>
-        std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& output,
-                                                      const iou& i) noexcept
-        {
-            return output << i.value();
-        }
+    std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& output,
+                                                  const iou& i) noexcept
+    {
+        return output << i.value();
+    }
 }
 
 #endif
-
