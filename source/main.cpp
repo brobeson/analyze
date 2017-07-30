@@ -1,6 +1,7 @@
 #include "bounding_box.h"
 #include "comma_ctype.h"
 #include "iou.h"
+#include "version.h"
 #include <fstream>
 #include <iostream>
 #include <numeric>
@@ -178,8 +179,15 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
+    const std::string argument(argv[1]);
+    if (argument == "--version")
+    {
+        std::cout << "analyze v" << analyze::version << std::endl;
+        return EXIT_SUCCESS;
+    }
+
     for (int a = 1; a < argc; ++a)
         analyze::analyze(argv[a]);
 
-    return 0;
+    return EXIT_SUCCESS;
 }
