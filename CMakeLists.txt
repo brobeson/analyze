@@ -8,7 +8,13 @@ endif()
 #------------------------------------------------------------------------------
 #                                                         system wide settings
 #------------------------------------------------------------------------------
-project(analyze VERSION 0.0.0)
+# using the VERSION option to the project() function, limits the version to integers. trying to use
+# VERSION 2017.07 removes the leading 0 from the month, which I want to remain. so, skip the VERSION
+# option to project(), and explicitly set the PROJECT_VERSION variables as strings.
+project(analyze)
+set(PROJECT_VERSION_MAJOR "2017")
+set(PROJECT_VERSION_MINOR "07")
+set(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
 
 # require a C++14 compiler
 set(CMAKE_CXX_STANDARD 14)
