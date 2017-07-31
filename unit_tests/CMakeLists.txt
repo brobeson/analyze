@@ -21,34 +21,26 @@ if (unit_test_coverage)
     # set up coverage information files
     set(baseline "baseline.info")
     set(tracefile "coverage.info")
-    set(clean_tracefile "clean_tracefile.info")
 
     # the build target for generating unit test coverage
     add_custom_target(coverage
         COMMAND lcov --directory ${CMAKE_BINARY_DIR}
                      --zerocounters
-        COMMAND lcov --rc lcov_branch_coverage=1
-                     --directory ${CMAKE_BINARY_DIR}
+        COMMAND lcov --directory ${CMAKE_BINARY_DIR}
                      --base-directory ${CMAKE_SOURCE_DIR}
                      --capture
-                     --no-external
                      --initial
                      --output-file ${baseline}
         COMMAND ctest --parallel=${nproc}
-        COMMAND lcov --rc lcov_branch_coverage=1
-                     --directory ${CMAKE_BINARY_DIR}
+        COMMAND lcov --directory ${CMAKE_BINARY_DIR}
                      --capture
-                     --no-external
                      --output-file ${tracefile}
-        COMMAND lcov --rc lcov_branch_coverage=1
-                     --add-tracefile ${baseline}
+        COMMAND lcov --add-tracefile ${baseline}
                      --add-tracefile ${tracefile}
                      --output-file ${tracefile}
-        COMMAND lcov --rc lcov_branch_coverage=1
-                     --remove ${tracefile} 'unit_tests/*'
-                     --output-file ${clean_tracefile}
+        COMMAND lcov --remove ${tracefile} '/usr/*'
+                     --output-file ${tracefile}
         COMMAND genhtml --legend
-                        --branch-coverage
                         --demangle-cpp
                         --title "${PROJECT_NAME} ${branch}"
                         --output-directory ${CMAKE_BINARY_DIR}/coverage
