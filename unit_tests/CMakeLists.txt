@@ -38,7 +38,7 @@ if (unit_test_coverage)
         COMMAND lcov --add-tracefile ${baseline}
                      --add-tracefile ${tracefile}
                      --output-file ${tracefile}
-        COMMAND lcov --remove ${tracefile} '/usr/*'
+        COMMAND lcov --remove ${tracefile} '/usr/*' '*.moc'
                      --output-file ${tracefile}
         COMMAND genhtml --legend
                         --demangle-cpp
