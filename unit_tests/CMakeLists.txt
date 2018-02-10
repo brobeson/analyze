@@ -11,6 +11,14 @@ set(CMAKE_AUTOMOC on)
 #------------------------------------------------------------------------------
 #                                               unit test code coverage report
 #------------------------------------------------------------------------------
+# provide a CMake time option to turn on and off unit test code coverage
+option(unit_test_coverage
+       "Toggle generating a build target for unit test code coverage."
+       off)
+if (unit_test_coverage)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage -fno-inline -fno-inline-small-functions -fno-default-inline")
+endif()
+
 if (unit_test_coverage)
     # determine the git branch, for use in the report title
     execute_process(COMMAND git rev-parse --abbrev-ref HEAD
@@ -58,7 +66,13 @@ set(test_name "bounding-box-test")
 add_executable(${test_name}
     bounding_box_test.cpp
     ${CMAKE_SOURCE_DIR}/source/bounding_box.h)
-target_link_libraries(${test_name} Qt5::Test)
+target_compile_options(${test_name} PRIVATE
+    $<$<CONFIG:Debug>:-fsanitize=address
+    $<$<CONFIG:Debug>:-fno-omit-frame-pointer
+    )
+target_link_libraries(${test_name}
+  $<$<CONFIG:Debug>:asan>
+  Qt5::Test)
 target_include_directories(${test_name}
     PRIVATE ${CMAKE_SOURCE_DIR}/source
             ${CMAKE_CURRENT_BINARY_DIR})
@@ -72,7 +86,13 @@ add_executable(${test_name}
     iou_test.cpp
     ${CMAKE_SOURCE_DIR}/source/iou.cpp
     ${CMAKE_SOURCE_DIR}/source/iou.h)
-target_link_libraries(${test_name} Qt5::Test)
+target_compile_options(${test_name} PRIVATE
+    $<$<CONFIG:Debug>:-fsanitize=address
+    $<$<CONFIG:Debug>:-fno-omit-frame-pointer
+    )
+target_link_libraries(${test_name}
+  $<$<CONFIG:Debug>:asan>
+  Qt5::Test)
 target_include_directories(${test_name}
     PRIVATE ${CMAKE_SOURCE_DIR}/source
             ${CMAKE_CURRENT_BINARY_DIR})
