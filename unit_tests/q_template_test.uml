@@ -1,0 +1,12 @@
+@startuml
+
+class QObject
+class test
+class factory <T> {
+    + operator() : T
+}
+
+QObject <|- test
+test *-- factory
+
+@enduml

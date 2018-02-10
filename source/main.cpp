@@ -140,20 +140,14 @@ namespace analyze
      * \details     This will load the bounding box results and ground truth, then calculate and
      *              output IoU data.
      */
-    void analyze(const std::string& sequence) noexcept
+    void analyze(const std::string& results_path, const std::string& ground_truth_path, const std::string& output_path) noexcept
     {
-        std::cout << "analyzing " << sequence << "...\n";
         try
         {
             // load the struck results for the sequence
-            auto results = load_results(sequence + ".boxes");
+            auto results = load_results(results_path);
 
             // load the ground truth for the sequence
-            std::string ground_truth_path("/home/brendan/Videos/struck_data/");
-            ground_truth_path.append(sequence)
-                             .append("/")
-                             .append(sequence)
-                             .append("_gt.txt");
             auto ground_truth = load_results(ground_truth_path);
 
             //sanity_check(results, "results.txt");
@@ -161,7 +155,7 @@ namespace analyze
 
             validate_box_lists(results, ground_truth);
             const auto ious = calculate_ious(results, ground_truth);
-            write_ious(ious, sequence + ".ious");
+            write_ious(ious, output_path);
         }
         catch (std::exception& e)
         {
@@ -175,7 +169,7 @@ int main(int argc, char** argv)
 {
     if (argc < 2)
     {
-        std::cerr << "error: at least one sequence is required\n";
+        std::cerr << "use: analyze RESULTS_FILE GROUND_TRUTH_FILE OUTPUT_FILE\n";
         return EXIT_FAILURE;
     }
 
@@ -186,8 +180,12 @@ int main(int argc, char** argv)
         return EXIT_SUCCESS;
     }
 
-    for (int a = 1; a < argc; ++a)
-        analyze::analyze(argv[a]);
+    if (argc < 4)
+    {
+        std::cerr << "use: analyze RESULTS_FILE GROUND_TRUTH_FILE OUTPUT_FILE\n";
+        return EXIT_FAILURE;
+    }
 
+    analyze::analyze(argv[1], argv[2], argv[3]);
     return EXIT_SUCCESS;
 }

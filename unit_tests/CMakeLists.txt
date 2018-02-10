@@ -4,6 +4,7 @@ if (NOT Qt5Test_FOUND)
     message(STATUS "Qt5 Test module wasn't found. I'm skipping the unit tests and code coverage.")
     return()
 endif()
+message("Qt5 test include directory: ${Qt5Test_INCLUDE_DIRS}")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/unit_tests")
 set(CMAKE_AUTOMOC on)
@@ -51,29 +52,41 @@ else()
     message(STATUS "unit_test_coverage is off, so the coverage build target won't be available.")
 endif()
 
+#---------------------------------------------------------------------------------------------------
+#                                             enumerate the unit tests, and a create a test
+#                                             executable for each one
+#---------------------------------------------------------------------------------------------------
+set(tests bounding_box_test iou_test)
+foreach(test IN tests)
+    project(${test})
+    add_executable(${PROJECT_NAME} ${test}.cpp)
+    target_link_libraries(${PROJECT_NAME} Qt5::Test)
+    add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
+endforeach()
+
 #-------------------------------------------------------------------------------
 #                                             unit tests analyze::bounding_box
 #-------------------------------------------------------------------------------
-set(test_name "bounding-box-test")
-add_executable(${test_name}
-    bounding_box_test.cpp
-    ${CMAKE_SOURCE_DIR}/source/bounding_box.h)
-target_link_libraries(${test_name} Qt5::Test)
-target_include_directories(${test_name}
-    PRIVATE ${CMAKE_SOURCE_DIR}/source
-            ${CMAKE_CURRENT_BINARY_DIR})
-add_test(NAME ${test_name} COMMAND ${test_name})
+#set(test_name "bounding-box-test")
+#add_executable(${test_name}
+#    bounding_box_test.cpp
+#    ${CMAKE_SOURCE_DIR}/source/bounding_box.h)
+#target_link_libraries(${test_name} Qt5::Test)
+#target_include_directories(${test_name}
+#    PRIVATE ${CMAKE_SOURCE_DIR}/source
+#            ${CMAKE_CURRENT_BINARY_DIR})
+#add_test(NAME ${test_name} COMMAND ${test_name})
 
 #-------------------------------------------------------------------------------
 #                                                      unit tests analyze::iou
 #-------------------------------------------------------------------------------
-set(test_name "iou-test")
-add_executable(${test_name}
-    iou_test.cpp
-    ${CMAKE_SOURCE_DIR}/source/iou.cpp
-    ${CMAKE_SOURCE_DIR}/source/iou.h)
-target_link_libraries(${test_name} Qt5::Test)
-target_include_directories(${test_name}
-    PRIVATE ${CMAKE_SOURCE_DIR}/source
-            ${CMAKE_CURRENT_BINARY_DIR})
-add_test(NAME ${test_name} COMMAND ${test_name})
+#set(test_name "iou-test")
+#add_executable(${test_name}
+#    iou_test.cpp
+#    ${CMAKE_SOURCE_DIR}/source/iou.cpp
+#    ${CMAKE_SOURCE_DIR}/source/iou.h)
+#target_link_libraries(${test_name} Qt5::Test)
+#target_include_directories(${test_name}
+#    PRIVATE ${CMAKE_SOURCE_DIR}/source
+#            ${CMAKE_CURRENT_BINARY_DIR})
+#add_test(NAME ${test_name} COMMAND ${test_name})

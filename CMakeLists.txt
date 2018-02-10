@@ -80,5 +80,5 @@ add_custom_target(lizard
 #------------------------------------------------------------------------------
 add_subdirectory(source)
 enable_testing()
-add_subdirectory(unit_tests)
+#add_subdirectory(unit_tests)
 
