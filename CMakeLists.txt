@@ -15,10 +15,8 @@ endif()
 # set up only debug and release builds. this is for multi-configuration build systems, like Visual
 # Studio, and single configuration build systems, like make.
 set(CMAKE_CONFIGURATION_TYPES Debug Release)
+set(CMAKE_BUILD_TYPE "release" CACHE STRING "Choose the type of build: debug or release.")
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS Debug Release)
-if (CMAKE_BUILD_TYPE STREQUAL "")
-    set(CMAKE_BUILD_TYPE "release" CACHE STRING "Choose the type of build: debug or release." FORCE)
-endif()
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
